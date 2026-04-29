@@ -41,6 +41,7 @@ export interface Book {
   year: number | null;
   editions: number;
   coverUrl: string | null;
+  language?: string[]; 
 }
 
 export interface BookDetail extends Book {
@@ -70,19 +71,37 @@ export const getCoverUrl = (coverId?: number, size: 'M' | 'L' = 'M'): string | n
   return `${COVERS_URL}/${coverId}-${size}.jpg`;
 };
 
+export interface SearchParams {
+  query?: string;
+  title?: string;
+  author?: string;
+  subject?: string;
+  limit?: number;
+}
+
 /**
- * Busca libros de forma general o por filtros
- * (Trabajo para la Persona 2)
+ * Busca libros de forma avanzada o general
  */
-export const searchBooks = async (query: string): Promise<Book[]> => {
+export const searchBooks = async (params: SearchParams): Promise<Book[]> => {
   try {
-    // Ejemplo: https://openlibrary.org/search.json?q=harry+potter
-    const response = await fetch(`${BASE_URL}/search.json?q=${encodeURIComponent(query)}&limit=20`);
+    let url = `${BASE_URL}/search.json?`;
+
+    // Construcción dinámica de la URL según el tipo de búsqueda
+    if (params.title) url += `title=${encodeURIComponent(params.title)}&`;
+    else if (params.author) url += `author=${encodeURIComponent(params.author)}&`;
+    else if (params.subject) url += `subject=${encodeURIComponent(params.subject)}&`;
+    else if (params.query) url += `q=${encodeURIComponent(params.query)}&`;
+
+    const limit = params.limit || 20;
+    url += `limit=${limit}`;
+
+    const response = await fetch(url);
     if (!response.ok) throw new Error('Error al buscar libros');
     
     const data: APISearchResponse = await response.json();
 
-    // Mapeamos los datos sucios de la API a nuestra interfaz limpia `Book`
+    if (!data.docs) return [];
+
     return data.docs.map((doc) => ({
       id: extractWorkId(doc.key),
       title: doc.title,
@@ -90,10 +109,11 @@ export const searchBooks = async (query: string): Promise<Book[]> => {
       year: doc.first_publish_year || null,
       editions: doc.edition_count || 1,
       coverUrl: getCoverUrl(doc.cover_i, 'M'),
+      language: doc.language || [], // Extraemos el idioma para los filtros
     }));
   } catch (error) {
     console.error(error);
-    return [];
+    throw error;
   }
 };
 
