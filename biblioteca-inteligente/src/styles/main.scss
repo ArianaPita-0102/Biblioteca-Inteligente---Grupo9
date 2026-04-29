@@ -1,4 +1,6 @@
 /* src/styles/main.scss */
+@import 'variables';
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -7,13 +9,18 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #ffffff; /* Listo para que después hagan el modo oscuro */
-  color: #1a1a1a;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Clases utilitarias básicas */
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 2rem 20px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
