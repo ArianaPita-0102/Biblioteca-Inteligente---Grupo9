@@ -1,21 +1,20 @@
-//import "@/styles/globals.css";
-//import type { AppProps } from "next/app";
-
-//export default function App({ Component, pageProps }: AppProps) {
- // return <Component {...pageProps} />;
-//}
-
-
 import type { AppProps } from 'next/app';
-import '@/styles/main.scss'; // Importación obligatoria del SCSS global
+import { useEffect } from 'react';
+import Navbar from '@/components/Navbar';
+import '@/styles/main.scss';
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
+
   return (
-    <div className="app-container">
-      {/* Aquí luego el equipo pondrá el <Navbar /> */}
+    <>
+      <Navbar />
       <main className="container">
         <Component {...pageProps} />
       </main>
-    </div>
+    </>
   );
 }
