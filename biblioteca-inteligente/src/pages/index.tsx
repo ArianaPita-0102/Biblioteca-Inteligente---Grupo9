@@ -24,7 +24,8 @@ export default function Home() {
     setLoading(true);
     setError(null);
     try {
-      const response = await searchBooks(topic);
+      
+      const response = await searchBooks({ subject: topic, limit: 8 });
       setBooks(response);
     } catch {
       setError('No se pudieron cargar los libros. Intenta de nuevo más tarde.');
