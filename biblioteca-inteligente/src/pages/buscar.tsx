@@ -42,25 +42,12 @@ export default function BuscarPage() {
     setHasSearched(true);
 
     try {
-      // Construimos la URL según el tipo de búsqueda
-      const param = TYPE_PARAM[type];
-      const response = await fetch(
-        `https://openlibrary.org/search.json?${param}=${encodeURIComponent(nextQuery)}&limit=40`
-      );
-      if (!response.ok) throw new Error('Error al buscar libros');
-      const data = await response.json();
-
-      const books: Book[] = (data.docs ?? []).map((doc: any) => ({
-        id: doc.key?.replace('/works/', '') ?? '',
-        title: doc.title ?? 'Sin título',
-        authors: doc.author_name ?? ['Autor Desconocido'],
-        year: doc.first_publish_year ?? null,
-        editions: doc.edition_count ?? 1,
-        coverUrl: doc.cover_i
-          ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
-          : null,
-        language: doc.language ?? [],
-      }));
+      // Usamos el servicio centralizado en lugar del fetch directo
+      const books = await searchBooks({
+        // Mapeamos el 'q' del SearchBar al 'query' del servicio
+        [type === 'q' ? 'query' : type]: nextQuery,
+        limit: 40 // Pedimos 40 para que la paginación local de Ariana funcione bien
+      });
 
       setResults(books);
     } catch {
