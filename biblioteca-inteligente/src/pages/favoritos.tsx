@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getFavorites } from '@/utils/storage';
 import { Book } from '@/services/openLibraryService';
 import BookCard from '@/components/BookCard';
+import styles from '@/styles/FavoritesPage.module.scss';
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState<Book[]>([]);
@@ -16,10 +17,10 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div>
+    <div className={styles['favorites-page']}>
       <h1>Mis Favoritos</h1>
 
-      <div className="books-grid">
+      <div className={styles['books-grid']}>
         {favorites.map((book) => (
           <BookCard key={book.id} book={book} />
         ))}
