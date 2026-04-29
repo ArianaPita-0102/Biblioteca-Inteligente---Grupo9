@@ -1,0 +1,45 @@
+.skeletonCard {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.skeletonImage,
+.skeletonTextTitle,
+.skeletonTextLine,
+.skeletonButton {
+  background-color: var(--border-color);
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeletonImage {
+  height: 200px;
+  width: 100%;
+}
+
+.skeletonTextTitle {
+  height: 24px;
+  width: 80%;
+}
+
+.skeletonTextLine {
+  height: 16px;
+  width: 60%;
+}
+
+.skeletonButton {
+  height: 40px;
+  width: 100%;
+  border-radius: 6px;
+  margin-top: auto;
+}
