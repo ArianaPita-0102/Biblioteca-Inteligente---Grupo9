@@ -2,6 +2,7 @@ import { Book } from '@/services/openLibraryService';
 import { addFavorite, removeFavorite, isFavorite } from '@/utils/storage';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import styles from '@/styles/BookCard.module.scss';
 
 interface Props {
   book: Book;
@@ -24,11 +25,11 @@ export default function BookCard({ book }: Props) {
   };
 
   return (
-    <div className="book-card">
+    <div className={styles['book-card']}>
       <img
         src={book.coverUrl || '/placeholder.png'}
         alt={book.title}
-        className="book-cover"
+        className={styles['book-cover']}
       />
 
       <h3>{book.title}</h3>
@@ -39,7 +40,7 @@ export default function BookCard({ book }: Props) {
 
       <p>Ediciones: {book.editions}</p>
 
-      <div className="actions">
+      <div className={styles['actions']}>
         <Link href={`/libro/${book.id}`}>
           <button>Ver detalle</button>
         </Link>
