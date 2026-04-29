@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { getBookDetail, BookDetail } from '@/services/openLibraryService';
 import { addFavorite, removeFavorite, isFavorite } from '@/utils/storage';
+import styles from '@/styles/BookDetailPage.module.scss';
 
 export default function BookDetailPage() {
   const router = useRouter();
@@ -42,37 +43,27 @@ export default function BookDetailPage() {
     setFavorite(!favorite);
   };
 
-  if (loading) return <p>Cargando...</p>;
-
-  if (!book) return <p>No se pudo cargar el libro.</p>;
-
   return (
-    <div>
-      <button onClick={() => router.back()}>← Volver</button>
+    <div className={styles['book-detail-page']}>
+      {loading && <p>Cargando...</p>}
 
-      <h1>{book.title}</h1>
+      {!loading && book && (
+        <div className={styles['book-detail']}>
+          <img src={book.coverUrl || '/placeholder.png'} alt={book.title} />
+          <h1>{book.title}</h1>
+          <p>{book.authors?.join(', ') || 'Autor desconocido'}</p>
+          <p>Año: {book.year || 'N/A'}</p>
+          <p>Ediciones: {book.editions}</p>
 
-      <img
-        src={book.coverUrl || '/placeholder.png'}
-        alt={book.title}
-        style={{ width: '300px' }}
-      />
+          <div className={styles['actions']}>
+            <button onClick={handleFavorite}>
+              {favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+            </button>
+          </div>
+        </div>
+      )}
 
-      <p><strong>Año:</strong> {book.year || 'N/A'}</p>
-
-      <p><strong>Descripción:</strong></p>
-      <p>{book.description}</p>
-
-      <p><strong>Temas:</strong></p>
-      <ul>
-        {book.subjects.map((subj, index) => (
-          <li key={index}>{subj}</li>
-        ))}
-      </ul>
-
-      <button onClick={handleFavorite}>
-        {favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-      </button>
+      {!loading && !book && <p>No se pudo cargar el libro.</p>}
     </div>
   );
 }
