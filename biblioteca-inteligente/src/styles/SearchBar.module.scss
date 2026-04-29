@@ -1,0 +1,96 @@
+@use 'variables' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+// ── Selector de tipo 
+.typeSelector {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.typeBtn {
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-color);
+  background: transparent;
+  color: var(--text-color);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+
+  &.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+    font-weight: 600;
+  }
+}
+
+// ── Formulario 
+.form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &::placeholder {
+    color: var(--text-color);
+    opacity: 0.45;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 15%, transparent);
+  }
+}
+
+.submitBtn {
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--primary-hover);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+
+@media (max-width: 480px) {
+  .submitBtn {
+    padding: 0.7rem 0.9rem;
+  }
+}
