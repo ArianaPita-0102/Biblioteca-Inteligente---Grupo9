@@ -7,7 +7,8 @@
   border-radius: 12px;
   padding: 16px;
   text-align: center;
-  background-color: #fff;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -26,13 +27,13 @@
 
 .book-card h3 {
   font-size: 18px;
-  color: #333;
+  color: var(--text-color) bold;
   margin: 8px 0;
 }
 
 .book-card p {
   font-size: 14px;
-  color: #555;
+  color: var(--text-color);
   margin: 4px 0;
 }
 
