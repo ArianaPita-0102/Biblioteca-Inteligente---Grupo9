@@ -1,14 +1,15 @@
 import { Book } from '@/services/openLibraryService';
-import { addFavorite, removeFavorite, isFavorite } from '@/utils/storage';
+import { addFavorite, removeFavorite, isFavorite, getFavorites } from '@/utils/storage';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from '@/styles/BookCard.module.scss';
 
 interface Props {
   book: Book;
+  onFavoriteChange?: (bookId: string) => void;
 }
 
-export default function BookCard({ book }: Props) {
+export default function BookCard({ book, onFavoriteChange }: Props) {
   const [favorite, setFavorite] = useState(false);
 
   useEffect(() => {
@@ -16,12 +17,21 @@ export default function BookCard({ book }: Props) {
   }, [book.id]);
 
   const handleFavorite = () => {
+    let updatedFavorites;
+
     if (favorite) {
       removeFavorite(book.id);
+      updatedFavorites = getFavorites();
     } else {
       addFavorite(book);
+      updatedFavorites = getFavorites();
     }
+
     setFavorite(!favorite);
+
+    if (onFavoriteChange) {
+      onFavoriteChange(book.id);
+    }
   };
 
   return (

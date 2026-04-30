@@ -12,6 +12,10 @@ export default function FavoritesPage() {
     setFavorites(favs);
   }, []);
 
+  function handleRemoveFavorite(bookId: string) {
+    setFavorites((prevFavorites) => prevFavorites.filter((book) => book.id !== bookId));
+  }
+
   if (favorites.length === 0) {
     return <p>No tienes libros favoritos aún.</p>;
   }
@@ -22,7 +26,7 @@ export default function FavoritesPage() {
 
       <div className={styles['books-grid']}>
         {favorites.map((book) => (
-          <BookCard key={book.id} book={book} />
+          <BookCard key={book.id} book={book} onFavoriteChange={() => handleRemoveFavorite(book.id)} />
         ))}
       </div>
     </div>
