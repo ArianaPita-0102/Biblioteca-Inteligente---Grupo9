@@ -49,7 +49,7 @@ export default function Home() {
         {/* Hero */}
         <section className={styles.hero}>
           <h1 className={styles.heroTitle}>
-            📚 Biblioteca <span className={styles.highlight}>Inteligente</span>
+            Biblioteca <span className={styles.highlight}>Inteligente</span>
           </h1>
           <p className={styles.heroSubtitle}>
             Explora miles de libros de acceso abierto. Descubre, guarda y comparte tus favoritos.

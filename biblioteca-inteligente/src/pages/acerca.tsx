@@ -15,19 +15,19 @@ export default function Acerca() {
         <h2>Nuestro Equipo</h2>
         <div className={styles.teamGrid}>
           <div className={styles.memberCard}>
-            <h3>Camilo Andre Rodriguez</h3>
+            <h3>Camilo Andre Rodriguez Oroza</h3>
             <span className={styles.role}>Arquitecto UI</span>
             <p>Responsable de la base visual, diseño responsive, y experiencia del modo oscuro.</p>
           </div>
           
           <div className={styles.memberCard}>
-            <h3>Ariana</h3>
+            <h3>Ariana Aylen Pita Vargas</h3>
             <span className={styles.role}>Data Engineer</span>
             <p>Especialista en integración de APIs, filtros dinámicos y arquitectura de búsqueda.</p>
           </div>
 
           <div className={styles.memberCard}>
-            <h3>Ostin</h3>
+            <h3>Ostin Lisandro Colque Rivas</h3>
             <span className={styles.role}>Especialista de Estado</span>
             <p>Encargado de la persistencia de datos, páginas de detalle y manipulación del estado global.</p>
           </div>
