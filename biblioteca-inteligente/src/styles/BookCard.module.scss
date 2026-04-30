@@ -5,7 +5,7 @@
   height: 100%;
   border: 1px solid #ddd;
   border-radius: 12px;
-  padding: 16px;
+  padding: 1.5rem;
   text-align: center;
   background-color: var(--card-bg);
   color: var(--text-color);
@@ -26,13 +26,14 @@
 }
 
 .book-card h3 {
-  font-size: 18px;
-  color: var(--text-color) bold;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--text-color);
   margin: 8px 0;
 }
 
 .book-card p {
-  font-size: 14px;
+  font-size: 1rem;
   color: var(--text-color);
   margin: 4px 0;
 }
