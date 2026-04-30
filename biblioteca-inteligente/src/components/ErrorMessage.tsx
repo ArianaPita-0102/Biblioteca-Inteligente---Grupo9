@@ -7,7 +7,7 @@ interface ErrorMessageProps {
 export default function ErrorMessage({ message }: ErrorMessageProps) {
   return (
     <div className={styles.errorBox}>
-      <span className={styles.icon}>⚠️</span>
+      <span className={styles.icon}>!</span>
       <p>{message}</p>
     </div>
   );
