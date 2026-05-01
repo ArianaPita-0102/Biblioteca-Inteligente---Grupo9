@@ -102,23 +102,35 @@
 
   .navLinks {
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* Alinea los items hacia arriba en lugar de al centro */
     position: fixed;
     top: 0;
-    right: -100%; /* Oculto a la derecha */
-    width: 100%;
+    right: -300px; /* Oculto exactamente el ancho que va a medir */
+    
+    /* CAMBIO CLAVE: Ancho fijo en lugar del 100% */
+    width: 280px; 
     height: 100vh;
     background-color: var(--bg-color);
     transition: right 0.3s ease-in-out;
-    padding: 2rem;
+    padding: 6rem 2rem 2rem; /* Más padding arriba para que los enlaces no choquen con el logo/botón */
     z-index: 100;
+    
+    /* Sombra elegante a la izquierda para separarlo del contenido de la página */
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1); 
 
     &.showMenu {
-      right: 0;
+      right: 0; /* Desliza hacia la pantalla */
     }
 
     a {
-      font-size: 1.5rem;
+      font-size: 1.25rem; /* Letra un poco más moderada y profesional */
+      width: 100%;
+      padding: 0.5rem 0;
+    }
+    
+    .themeToggle {
+      margin-top: 1rem;
+      width: 100%; /* El botón se adapta al menú lateral */
     }
   }
 }
