@@ -19,11 +19,9 @@ export default function BookDetailPage() {
     const fetchData = async () => {
       setLoading(true);
       setError(false);
-
       try {
         const data = await getBookDetail(workId);
         setBook(data);
-
         if (data) {
           setFavorite(isFavorite(data.id));
         }
@@ -39,13 +37,11 @@ export default function BookDetailPage() {
 
   const handleFavorite = () => {
     if (!book) return;
-
     if (favorite) {
       removeFavorite(book.id);
     } else {
       addFavorite(book);
     }
-
     setFavorite(!favorite);
   };
 
@@ -73,26 +69,26 @@ export default function BookDetailPage() {
           alt={book.title}
           className={styles['book-cover']}
         />
-
         <div className={styles['book-info']}>
           <h1>{book.title}</h1>
-
           <p>
             <strong>Descripción:</strong>{' '}
             {book.description || 'No hay descripción disponible para este libro.'}
           </p>
-
           <p>
             <strong>Autores:</strong>{' '}
             {book.authors.length > 0
               ? book.authors.join(', ')
               : 'Autor desconocido'}
           </p>
-
           <p>
             <strong>Año de publicación:</strong> {book.year || 'N/A'}
           </p>
-
+          {/* CORRECCIÓN: Agregado el dato de Ediciones */}
+          <p>
+            <strong>Ediciones:</strong> {book.editions}
+          </p>
+          
           <div>
             <strong>Temas relacionados:</strong>
             {book.subjects.length > 0 ? (

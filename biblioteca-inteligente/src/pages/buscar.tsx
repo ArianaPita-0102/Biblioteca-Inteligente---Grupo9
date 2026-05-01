@@ -3,11 +3,10 @@ import Head from 'next/head';
 import BookCard from '@/components/BookCard';
 import ErrorMessage from '@/components/ErrorMessage';
 import FilterPanel, { FilterValues, DEFAULT_FILTERS } from '@/components/FilterPanel';
-import Loading from '@/components/Loading';
-import SearchBar from '@/components/SearchBar';
 import Skeleton from '@/components/Skeleton';
 import { Book, searchBooks } from '@/services/openLibraryService';
 import styles from '@/styles/buscar.module.scss';
+import SearchBar from '@/components/SearchBar';
 
 const PAGE_SIZE = 10;
 
@@ -59,7 +58,6 @@ export default function BuscarPage() {
     setCurrentPage(1);
   };
 
-  // Filtrado + ordenamiento en memoria
   const filteredResults = useMemo(() => {
     const minYear = filters.minYear ? Number(filters.minYear) : null;
     const maxYear = filters.maxYear ? Number(filters.maxYear) : null;
@@ -71,9 +69,12 @@ export default function BuscarPage() {
       const okAuthor = authorFilter
         ? book.authors.some((a) => a.toLowerCase().includes(authorFilter))
         : true;
+      
+      // CORRECCIÓN: Se eliminó el casteo "any" respetando TypeScript
       const okLang = filters.language
-        ? (book as any).language?.includes(filters.language)
+        ? book.language?.includes(filters.language)
         : true;
+
       return okMin && okMax && okAuthor && okLang;
     });
 
@@ -88,6 +89,7 @@ export default function BuscarPage() {
 
   const totalPages = Math.max(1, Math.ceil(filteredResults.length / PAGE_SIZE));
   const safePage = Math.min(currentPage, totalPages);
+
   const paginatedResults = filteredResults.slice(
     (safePage - 1) * PAGE_SIZE,
     safePage * PAGE_SIZE
@@ -100,24 +102,19 @@ export default function BuscarPage() {
       </Head>
 
       <div className={styles.page}>
-        {/* Cabecera */}
         <div className={styles.header}>
           <h1 className={styles.title}>Búsqueda de libros</h1>
           <SearchBar onSearch={handleSearch} initialValue={query} />
         </div>
 
-        {/* Cuerpo: filtros + resultados */}
         <div className={styles.body}>
-          {/* Filtros — solo visibles tras búsqueda */}
           {hasSearched && (
             <aside className={styles.sidebar}>
               <FilterPanel value={filters} onChange={handleFilterChange} />
             </aside>
           )}
 
-          {/* Área de resultados */}
           <section className={styles.results}>
-            {/* Cargando con Skeleton */}
             {loading && (
               <div className={styles.skeletonGrid}>
                 {Array.from({ length: 6 }).map((_, i) => (
@@ -126,22 +123,18 @@ export default function BuscarPage() {
               </div>
             )}
 
-            {/* Error */}
             {!loading && error && <ErrorMessage message={error} />}
 
-            {/* Estado inicial: aún no buscó */}
+            {/* CORRECCIÓN: Se eliminaron los span vacíos en los estados */}
             {!loading && !error && !hasSearched && (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>📚</span>
                 <p>Escribe algo para buscar libros.</p>
                 <p className={styles.hint}>Puedes buscar por título, autor o tema.</p>
               </div>
             )}
 
-            {/* Sin resultados tras filtros */}
             {!loading && !error && hasSearched && filteredResults.length === 0 && results.length > 0 && (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>🔍</span>
                 <p>Los filtros actuales no muestran resultados.</p>
                 <button
                   type="button"
@@ -153,16 +146,13 @@ export default function BuscarPage() {
               </div>
             )}
 
-            {/* API no devolvió nada */}
             {!loading && !error && hasSearched && results.length === 0 && (
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}></span>
                 <p>No se encontraron libros para &quot;{query}&quot;.</p>
                 <p className={styles.hint}>Intenta con otras palabras.</p>
               </div>
             )}
 
-            {/* Resultados */}
             {!loading && !error && paginatedResults.length > 0 && (
               <>
                 <p className={styles.count}>
@@ -176,28 +166,27 @@ export default function BuscarPage() {
                   ))}
                 </div>
 
-                {/* Paginación */}
                 {totalPages > 1 && (
                   <div className={styles.pagination}>
                     <button
                       type="button"
-                      className={styles.pageBtn}
+                       className={styles.pageBtn}
                       disabled={safePage <= 1}
                       onClick={() => setCurrentPage((p) => p - 1)}
                     >
-                      ‹ Anterior
+                        Anterior
                     </button>
                     <span className={styles.pageInfo}>
                       Página {safePage} de {totalPages}
                     </span>
                     <button
                       type="button"
-                      className={styles.pageBtn}
+                       className={styles.pageBtn}
                       disabled={safePage >= totalPages}
                       onClick={() => setCurrentPage((p) => p + 1)}
                     >
-                      Siguiente ›
-                    </button>
+                      Siguiente
+                     </button>
                   </div>
                 )}
               </>
