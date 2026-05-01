@@ -7,7 +7,6 @@
   margin: 0 auto;
 }
 
-// ── Selector de tipo ──────────────────────────────────────────
 .typeSelector {
   display: flex;
   gap: 0.4rem;
@@ -37,7 +36,6 @@
   }
 }
 
-// ── Formulario ────────────────────────────────────────────────
 .form {
   display: flex;
   gap: 0.5rem;
@@ -86,7 +84,6 @@
   }
 }
 
-// ── Responsive ────────────────────────────────────────────────
 @media (max-width: 480px) {
   .submitBtn {
     padding: 0.7rem 0.9rem;

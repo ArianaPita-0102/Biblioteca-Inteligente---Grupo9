@@ -11,10 +11,8 @@ import styles from '@/styles/buscar.module.scss';
 
 const PAGE_SIZE = 10;
 
-// Tipo de búsqueda (debe coincidir con SearchBar)
 type SearchType = 'q' | 'title' | 'author' | 'subject';
 
-// Mapeo de tipo a parámetro de la API de Open Library
 const TYPE_PARAM: Record<SearchType, string> = {
   q: 'q',
   title: 'title',
@@ -42,11 +40,9 @@ export default function BuscarPage() {
     setHasSearched(true);
 
     try {
-      // Usamos el servicio centralizado en lugar del fetch directo
       const books = await searchBooks({
-        // Mapeamos el 'q' del SearchBar al 'query' del servicio
         [type === 'q' ? 'query' : type]: nextQuery,
-        limit: 40 // Pedimos 40 para que la paginación local de Ariana funcione bien
+        limit: 40
       });
 
       setResults(books);

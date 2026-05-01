@@ -4,7 +4,6 @@
   padding: 0 1.25rem 4rem;
 }
 
-// ── Cabecera ──────────────────────────────────────────────────
 .header {
   padding: 2.5rem 0 2rem;
   text-align: center;
@@ -17,7 +16,6 @@
   margin-bottom: 1.25rem;
 }
 
-// ── Layout: sidebar + resultados ──────────────────────────────
 .body {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -30,7 +28,6 @@
   top: 80px;
 }
 
-// ── Resultados ────────────────────────────────────────────────
 .results {
   min-height: 300px;
 }
@@ -60,7 +57,6 @@
   gap: 1rem;
 }
 
-// ── Estado vacío ──────────────────────────────────────────────
 .emptyState {
   display: flex;
   flex-direction: column;
@@ -94,7 +90,6 @@
   font-size: 0.9rem;
 }
 
-// ── Paginación ────────────────────────────────────────────────
 .pagination {
   display: flex;
   align-items: center;
@@ -131,7 +126,6 @@
   opacity: 0.65;
 }
 
-// ── Responsive ────────────────────────────────────────────────
 @media (max-width: 768px) {
   .body {
     grid-template-columns: 1fr;

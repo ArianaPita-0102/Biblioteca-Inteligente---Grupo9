@@ -1,10 +1,5 @@
-// ==========================================
-// 1. INTERFACES DE LA API (Tipados exactos)
-// ==========================================
-
-// Representa un libro dentro de la lista de resultados de búsqueda
 export interface APISearchDoc {
-  key: string; // ej: "/works/OL82563W"
+  key: string;
   title: string;
   author_name?: string[];
   first_publish_year?: number;
@@ -13,17 +8,15 @@ export interface APISearchDoc {
   language?: string[];
 }
 
-// Representa la respuesta completa al buscar (search.json)
 export interface APISearchResponse {
   numFound: number;
   start: number;
   docs: APISearchDoc[];
 }
 
-// Representa el detalle completo de un libro (/works/{id}.json)
 export interface APIWorkDetail {
   title: string;
-  description?: string | { type: string; value: string }; // OpenLibrary tiene 2 formatos para esto
+  description?: string | { type: string; value: string };
   covers?: number[];
   subjects?: string[];
   first_publish_date?: string;
@@ -33,11 +26,6 @@ export interface APIWorkDetail {
   interface APIAuthorDetail {
     name?: string;
 }
-
-// ==========================================
-// 2. INTERFACES LIMPIAS (Para el Frontend)
-// ==========================================
-// Usaremos estas interfaces en los componentes para no lidiar con datos sucios
 
 export interface Book {
   id: string;
@@ -54,23 +42,13 @@ export interface BookDetail extends Book {
   subjects: string[];
 }
 
-// ==========================================
-// 3. FUNCIONES DEL SERVICIO
-// ==========================================
-
 const BASE_URL = 'https://openlibrary.org';
 const COVERS_URL = 'https://covers.openlibrary.org/b/id';
 
-/**
- * Extrae solo el ID del work (ej: "/works/OL82563W" -> "OL82563W")
- */
 export const extractWorkId = (key: string): string => {
   return key.replace('/works/', '');
 };
 
-/**
- * Genera la URL de la portada. Size puede ser 'S', 'M' o 'L'
- */
 export const getCoverUrl = (coverId?: number, size: 'M' | 'L' = 'M'): string | null => {
   if (!coverId) return null;
   return `${COVERS_URL}/${coverId}-${size}.jpg`;
@@ -84,9 +62,6 @@ export interface SearchParams {
   limit?: number;
 }
 
-/**
- * Busca libros de forma avanzada o general
- */
 export const searchBooks = async (params: SearchParams): Promise<Book[]> => {
   try {
     let url = `${BASE_URL}/search.json?`;
@@ -122,19 +97,13 @@ export const searchBooks = async (params: SearchParams): Promise<Book[]> => {
   }
 };
 
-/**
- * Obtiene el detalle completo de un libro por su ID
- * (Trabajo para la Persona 3)
- */
 export const getBookDetail = async (workId: string): Promise<BookDetail | null> => {
   try {
-    // Ejemplo: https://openlibrary.org/works/OL82563W.json
     const response = await fetch(`${BASE_URL}/works/${workId}.json`);
     if (!response.ok) throw new Error('Error al obtener el detalle');
     
     const data: APIWorkDetail = await response.json();
 
-    // Manejar la descripción inconsistente de OpenLibrary
     let cleanDescription = 'No hay descripción disponible para este libro.';
     if (data.description) {
       cleanDescription = typeof data.description === 'string' ? data.description : data.description.value;
