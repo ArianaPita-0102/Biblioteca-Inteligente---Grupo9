@@ -1,3 +1,13 @@
+## BIBLIOTECA INTELIGENTE GRUPO 9
+
+INTEGRANTES DE GRUPO:
+
+- Ostin Lisandro Colque Rivas
+- Ariana Aylen Pita Vargas
+- Camilo Andre Rodriguez Oroza
+
+Link repositorio github: https://github.com/ArianaPita-0102/Biblioteca-Inteligente---Grupo9
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
 ## Getting Started
