@@ -12,13 +12,6 @@ const PAGE_SIZE = 10;
 
 type SearchType = 'q' | 'title' | 'author' | 'subject';
 
-const TYPE_PARAM: Record<SearchType, string> = {
-  q: 'q',
-  title: 'title',
-  author: 'author',
-  subject: 'subject',
-};
-
 export default function BuscarPage() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Book[]>([]);
@@ -43,7 +36,6 @@ export default function BuscarPage() {
         [type === 'q' ? 'query' : type]: nextQuery,
         limit: 40
       });
-
       setResults(books);
     } catch {
       setError('Ocurrió un error al buscar libros. Intenta de nuevo.');
@@ -70,7 +62,7 @@ export default function BuscarPage() {
         ? book.authors.some((a) => a.toLowerCase().includes(authorFilter))
         : true;
       
-      // CORRECCIÓN: Se eliminó el casteo "any" respetando TypeScript
+      // Tipado estricto sin "any"
       const okLang = filters.language
         ? book.language?.includes(filters.language)
         : true;
@@ -125,7 +117,7 @@ export default function BuscarPage() {
 
             {!loading && error && <ErrorMessage message={error} />}
 
-            {/* CORRECCIÓN: Se eliminaron los span vacíos en los estados */}
+            {/* DOM limpio: sin spans vacíos */}
             {!loading && !error && !hasSearched && (
               <div className={styles.emptyState}>
                 <p>Escribe algo para buscar libros.</p>

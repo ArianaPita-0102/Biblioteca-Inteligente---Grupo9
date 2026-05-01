@@ -84,7 +84,6 @@ export default function BookDetailPage() {
           <p>
             <strong>Año de publicación:</strong> {book.year || 'N/A'}
           </p>
-          {/* CORRECCIÓN: Agregado el dato de Ediciones */}
           <p>
             <strong>Ediciones:</strong> {book.editions}
           </p>
