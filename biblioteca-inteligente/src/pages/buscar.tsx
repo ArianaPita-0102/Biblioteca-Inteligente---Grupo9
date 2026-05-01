@@ -62,7 +62,6 @@ export default function BuscarPage() {
         ? book.authors.some((a) => a.toLowerCase().includes(authorFilter))
         : true;
       
-      // Tipado estricto sin "any"
       const okLang = filters.language
         ? book.language?.includes(filters.language)
         : true;

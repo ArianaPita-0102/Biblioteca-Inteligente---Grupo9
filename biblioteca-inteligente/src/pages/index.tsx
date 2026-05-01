@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { GetStaticProps } from 'next';
 import BookCard from '@/components/BookCard';
 import ErrorMessage from '@/components/ErrorMessage';
-import Loading from '@/components/Loading';
 import Skeleton from '@/components/Skeleton';
 import { Book, searchBooks } from '@/services/openLibraryService';
 import styles from '@/styles/index.module.scss';
@@ -14,17 +14,22 @@ const TOPICS = [
   { label: 'JavaScript', value: 'javascript' },
 ];
 
-export default function Home() {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState(true);
+interface HomeProps {
+  initialBooks: Book[];
+}
+
+export default function Home({ initialBooks }: HomeProps) {
+  // Inicializamos directamente con los libros pre-cargados por el servidor
+  const [books, setBooks] = useState<Book[]>(initialBooks || []);
+  const [loading, setLoading] = useState(false); // Ya no hay pantalla de carga inicial
   const [error, setError] = useState<string | null>(null);
   const [activeTopic, setActiveTopic] = useState(TOPICS[0].value);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   const fetchBooks = async (topic: string) => {
     setLoading(true);
     setError(null);
     try {
-      
       const response = await searchBooks({ subject: topic, limit: 8 });
       setBooks(response);
     } catch {
@@ -35,6 +40,10 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      return; // Saltamos la petición en el primer montaje porque ya tenemos los datos
+    }
     void fetchBooks(activeTopic);
   }, [activeTopic]);
 
@@ -46,7 +55,6 @@ export default function Home() {
       </Head>
 
       <div className={styles.page}>
-        {/* Hero */}
         <section className={styles.hero}>
           <h1 className={styles.heroTitle}>
             Biblioteca <span className={styles.highlight}>Inteligente</span>
@@ -56,7 +64,6 @@ export default function Home() {
           </p>
         </section>
 
-        {/* Selector de temas */}
         <section className={styles.topicsSection}>
           <h2 className={styles.sectionTitle}>Explorar por tema</h2>
           <div className={styles.chips}>
@@ -73,7 +80,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Libros */}
         <section className={styles.booksSection}>
           {loading && (
             <div className={styles.skeletonGrid}>
@@ -83,9 +89,7 @@ export default function Home() {
             </div>
           )}
 
-          {!loading && error && (
-            <ErrorMessage message={error} />
-          )}
+          {!loading && error && <ErrorMessage message={error} />}
 
           {!loading && !error && books.length === 0 && (
             <p className={styles.empty}>No se encontraron libros para este tema.</p>
@@ -108,3 +112,18 @@ export default function Home() {
     </>
   );
 }
+
+// Pre-renderiza la página en el servidor (Mejora brutal de Lighthouse)
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    const initialBooks = await searchBooks({ subject: 'software engineering', limit: 8 });
+    return {
+      props: { initialBooks },
+      revalidate: 86400, // Revalida la caché cada 24h
+    };
+  } catch {
+    return {
+      props: { initialBooks: [] },
+    };
+  }
+};
