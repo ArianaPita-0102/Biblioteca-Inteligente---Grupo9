@@ -1,0 +1,143 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+
+.header {
+  padding: 2.5rem 0 2rem;
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 800;
+  color: var(--text-color);
+  margin-bottom: 1.25rem;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.sidebar {
+  position: sticky;
+  top: 80px;
+}
+
+.results {
+  min-height: 300px;
+}
+
+.count {
+  font-size: 0.88rem;
+  color: var(--text-color);
+  opacity: 0.6;
+  margin-bottom: 1rem;
+
+  strong {
+    opacity: 1;
+    color: var(--text-color);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 200px los hará más pequeños y uniformes */
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1rem;
+  text-align: center;
+  color: var(--text-color);
+  opacity: 0.65;
+  gap: 0.4rem;
+}
+
+.emptyIcon {
+  font-size: 2.8rem;
+  margin-bottom: 0.4rem;
+  opacity: 1;
+}
+
+.hint {
+  font-size: 0.88rem;
+  opacity: 0.7;
+}
+
+.clearLink {
+  margin-top: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 0 0;
+  flex-wrap: wrap;
+}
+
+.pageBtn {
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.pageInfo {
+  font-size: 0.88rem;
+  color: var(--text-color);
+  opacity: 0.65;
+}
+
+@media (max-width: 768px) {
+  .body {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 480px) {
+  .skeletonGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

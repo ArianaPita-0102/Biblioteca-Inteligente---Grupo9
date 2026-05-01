@@ -1,8 +1,12 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  reactStrictMode: true,
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'covers.openlibrary.org',
+      },
+    ],
+  },
 };
-
 export default nextConfig;
