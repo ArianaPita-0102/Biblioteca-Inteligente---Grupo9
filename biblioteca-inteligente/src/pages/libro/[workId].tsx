@@ -10,6 +10,7 @@ export default function BookDetailPage() {
 
   const [book, setBook] = useState<BookDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [favorite, setFavorite] = useState(false);
 
   useEffect(() => {
@@ -17,15 +18,20 @@ export default function BookDetailPage() {
 
     const fetchData = async () => {
       setLoading(true);
+      setError(false);
 
-      const data = await getBookDetail(workId);
-      setBook(data);
+      try {
+        const data = await getBookDetail(workId);
+        setBook(data);
 
-      if (data) {
-        setFavorite(isFavorite(data.id));
+        if (data) {
+          setFavorite(isFavorite(data.id));
+        }
+      } catch {
+        setError(true);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     fetchData();
@@ -43,27 +49,79 @@ export default function BookDetailPage() {
     setFavorite(!favorite);
   };
 
+  if (loading) {
+    return <p className={styles.message}>Cargando...</p>;
+  }
+
+  if (error) {
+    return <p className={styles.message}>Error al cargar el libro</p>;
+  }
+
+  if (!book) {
+    return <p className={styles.message}>No hay información disponible</p>;
+  }
+
   return (
     <div className={styles['book-detail-page']}>
-      {loading && <p>Cargando...</p>}
+      <button className={styles['back-button']} onClick={() => router.back()}>
+        Volver
+      </button>
 
-      {!loading && book && (
-        <div className={styles['book-detail']}>
-          <img src={book.coverUrl || '/placeholder.png'} alt={book.title} />
+      <div className={styles['book-detail']}>
+        <img
+          src={book.coverUrl || '/placeholder.png'}
+          alt={book.title}
+          className={styles['book-cover']}
+        />
+
+        <div className={styles['book-info']}>
           <h1>{book.title}</h1>
-          <p>{book.authors?.join(', ') || 'Autor desconocido'}</p>
-          <p>Año: {book.year || 'N/A'}</p>
-          <p>Ediciones: {book.editions}</p>
 
-          <div className={styles['actions']}>
+          <p>
+            <strong>Descripción:</strong>{' '}
+            {book.description || 'No hay descripción disponible para este libro.'}
+          </p>
+
+          <p>
+            <strong>Autores:</strong>{' '}
+            {book.authors.length > 0
+              ? book.authors.join(', ')
+              : 'Autor desconocido'}
+          </p>
+
+          <p>
+            <strong>Año de publicación:</strong> {book.year || 'N/A'}
+          </p>
+
+          <div>
+            <strong>Temas relacionados:</strong>
+            {book.subjects.length > 0 ? (
+              <ul className={styles.subjects}>
+                {book.subjects.map((subject) => (
+                  <li key={subject}>{subject}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No hay temas disponibles.</p>
+            )}
+          </div>
+
+          <a
+            href={`https://openlibrary.org/works/${book.id}`}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.link}
+          >
+            Ver en Open Library
+          </a>
+
+          <div className={styles.actions}>
             <button onClick={handleFavorite}>
               {favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
             </button>
           </div>
         </div>
-      )}
-
-      {!loading && !book && <p>No se pudo cargar el libro.</p>}
+      </div>
     </div>
   );
 }

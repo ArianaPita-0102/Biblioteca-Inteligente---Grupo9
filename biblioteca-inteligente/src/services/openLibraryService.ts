@@ -27,6 +27,11 @@ export interface APIWorkDetail {
   covers?: number[];
   subjects?: string[];
   first_publish_date?: string;
+  authors?: Array<{ author?: { key?: string } }>;
+  }
+
+  interface APIAuthorDetail {
+    name?: string;
 }
 
 // ==========================================
@@ -132,20 +137,36 @@ export const getBookDetail = async (workId: string): Promise<BookDetail | null> 
     // Manejar la descripción inconsistente de OpenLibrary
     let cleanDescription = 'No hay descripción disponible para este libro.';
     if (data.description) {
-      cleanDescription = typeof data.description === 'string' 
-        ? data.description 
-        : data.description.value;
+      cleanDescription = typeof data.description === 'string' ? data.description : data.description.value;
     }
+
+    const authorKeys = data.authors
+      ?.map((entry) => entry.author?.key)
+      .filter((key): key is string => Boolean(key)) || [];
+
+    const authorNames = await Promise.all(
+      authorKeys.slice(0, 5).map(async (authorKey) => {
+        try {
+          const authorResponse = await fetch(`${BASE_URL}${authorKey}.json`);
+          if (!authorResponse.ok) return null;
+          const authorData: APIAuthorDetail = await authorResponse.json();
+          return authorData.name || null;
+        } catch {
+          return null;
+        }
+      }),
+    );
+
 
     return {
       id: workId,
       title: data.title,
-      authors: [], // Nota: El endpoint de works no siempre trae autores directamente, requiere otro fetch a /authors/. Lo dejamos vacío temporalmente.
-      year: data.first_publish_date ? parseInt(data.first_publish_date) : null,
+      authors: authorNames.filter((author): author is string => Boolean(author)),
+      year: data.first_publish_date ? parseInt(data.first_publish_date, 10) || null : null,
       editions: 0,
       coverUrl: data.covers && data.covers.length > 0 ? getCoverUrl(data.covers[0], 'L') : null,
       description: cleanDescription,
-      subjects: data.subjects?.slice(0, 5) || [], // Tomamos solo los primeros 5 temas
+      subjects: data.subjects?.slice(0, 8) || [],
     };
   } catch (error) {
     console.error(error);
